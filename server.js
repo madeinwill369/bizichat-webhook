@@ -3,7 +3,7 @@ const cors = require('cors');
 const { exec } = require('child_process');
 
 const app = express();
-const PORT = 3030;
+const PORT = process.env.PORT || 3030;
 
 app.use(cors());
 app.use(express.json());
@@ -13,15 +13,14 @@ app.post('/resend', (req, res) => {
 
   exec('node resend.js', (err, stdout, stderr) => {
     if (err) {
-      console.error('❌ Script error:', err);
+      console.error("❌ Script error:", err);
       return res.status(500).send("Script failed.");
     }
+
     console.log(stdout);
     res.send("✅ Resend triggered.");
   });
 });
-
-const PORT = process.env.PORT || 3030;
 
 app.listen(PORT, () => {
   console.log(`🚀 Webhook running on port ${PORT}`);
